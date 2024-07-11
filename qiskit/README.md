@@ -1,7 +1,6 @@
 # Quantum Databases (QDB) with Qiskit
 
-Simulation of the `prepare` and `extend` operation for QDB with quantum index and classical data.
-
+Simulation of the `prepare` and `extend` operation for QDB with quantum index and classical data as given in [arXiv:2405.14947](https://arxiv.org/abs/2405.14947). The implementation is focussed on transforming the index register and can be simply extended to be applied on the data register also. Furhtermore, the extension operation implements the specific case of adding one ancilla qubit (z=1) as described in the exemplary case of Algorithm 5 in [arXiv:2405.14947](https://arxiv.org/abs/2405.14947). 
 
 
 ## Installation
@@ -20,5 +19,4 @@ python extend.py
 ```
 
 ## To test the QDB operations prepare and extend use the Jupyter notebook
-visualize_algs.ipynb 
-
+The jupyter notebook is given by [visualize_algs.ipynb](https://www.ibm.com/quantum/qiskit/visualize_algs.ipynb).

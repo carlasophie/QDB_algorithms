@@ -33,21 +33,20 @@ def prepare(k,l, classical_register=False):
     else:
         qc = QuantumCircuit(qr)
 
-    #note that qiskit uses little-endian representation of the qubits
+    #note that qiskit uses endian representation of the qubits
     qubit_list = list(np.arange(0, t))
 
-    #compute angle 
+    #compute angle and apply RY gate
     theta = 2*np.arccos(np.sqrt(p))
-    print("[W] RY gate, theta =", theta, "on qubit", 0)
     qc.ry(theta, qr[qubit_list[0]])
 
-    #loop over range from 1 to (t-1) 
+    #loop over range from 1 to (t-1) of qubits
     for i in np.arange(1,t): 
         #define range from (t-2) to 0
         j = (t-1) - i 
+
+        #apply layer of RY gates that form a balanced superposition and which acts Hadamard-like on the |0> state
         theta12 = 2*np.arccos(np.sqrt(1/2.))
-        #apply layer of RY gates that form a balanced superposition and act Hadamard-like on the |0> state
-        print("[Z] RY gate, theta =", theta12, "on qubit", i)
         qc.ry(theta12, i)
 
 
@@ -60,7 +59,6 @@ def prepare(k,l, classical_register=False):
             multi_control_ry = ry_gate.control(num_controls, ctrl_state=s[:(i)][::-1])
             #apply custom multi-controlled RY gate
             qc.append(multi_control_ry, [qr[qubit_list[i]] for i in np.arange(0,i+1)])
-            print("[A] controlled RY gate, p =", 1, "control states", s[:(i)])
 
         else:
             #define custom multi-controlled RY gate
@@ -79,9 +77,9 @@ def prepare(k,l, classical_register=False):
             multi_control_ry = ry_gate.control(num_controls, ctrl_state=s[:(i)][::-1])
             #apply custom multi-controlled RY gate
             qc.append(multi_control_ry, [qr[qubit_list[i]] for i in (np.arange(0,i))] + [qr[qubit_list[i]]])
-            print("[B] controlled RY gate, p =", p, "control states", s[:(i)])
 
         #define custom multi-controlled RY gate controlled by all zero string 0_{t-1}, ..., 0_{j+1} (notation as in A.1)
+        #the angle is computed to create the specifically imbalanced database which is going to be extended 
         ry_gate = RYGate(-theta12)
         num_controls=len(np.arange(0,i))
         multi_control_ry = ry_gate.control(len(string0(i)), ctrl_state=string0(i))
@@ -94,8 +92,6 @@ def prepare(k,l, classical_register=False):
         num_controls=len(np.arange(0,i))
         multi_control_ry = ry_gate.control(len(string0(i)), ctrl_state=string0(i))
         qc.append(multi_control_ry, [qr[qubit_list[i]] for i in np.arange(0,i+1)])
-        print("[C] controlled RY gate, p =", p, "control states", string0(i))
- 
     return qc
 
 def string0(n):
@@ -132,7 +128,6 @@ def revert_endian_encoding(k, statevector):
     assert len(all_str) == len(statevector), "Length of statevector and all_str must be equal"
     for i, si in enumerate(all_str):
         new_statevector[si] = statevector[i]
-
     return new_statevector
 
 
@@ -162,9 +157,8 @@ def run_qc(qc, num_indices, revert_end=True):
 if __name__ == "__main__":
 
     #execute example cases for prepare function
-
     #define parameters k and l
-    k = 11
+    k = 15
     l = 0
 
     assert k > 1, "k must be strictly greater than 1"
@@ -182,8 +176,9 @@ if __name__ == "__main__":
     psi2 = psi.copy()
     print("statevector: ", psi_array)
 
+    #check resulting state  
     print("Number of non-zero elements in the statevector: ", np.count_nonzero(psi_array), ", (k, l) =  (", k, ",", l, ")")
     assert np.count_nonzero(psi_array) == k, "Number of non-zero elements in the statevector must be equal to k"
     assert (psi_array[0] - 1/np.sqrt(k))< 1e-4, "norm is incorrect"
-    filename = './visualize_statevector.pdf'
+    filename = './visualize_statevector_prepare.pdf'
     psi2.draw('city', filename=filename)

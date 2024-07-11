@@ -35,8 +35,7 @@ def extend(qc, l):
     qr = qc.qubits
 
     #compute number of qubits 
-    dim_index = len(qr) -1
-    #print("dim_index = ", dim_index)
+    dim_index = len(qr) - 1
 
     #compute angle 
     theta = 2*np.arccos(np.sqrt(1/(l+1.)))
@@ -66,7 +65,7 @@ def extend(qc, l):
 
 
 
-def run_qc(qc, k, l, revert_end=False):
+def run_qc2(qc, k, l, revert_end=False):
     """Runs the simulator including transpilation to get the statevector of the quantum circuit.
 
     Args:
@@ -122,7 +121,7 @@ def revert_endian(statevector, k, l=0):
                 #reverse order
                 si = si[::-1]
                 int_si = int(si, 2)
-                new_order_statevector[int_si] = statevector[i]
+                new_order_statevector[int_si] = (statevector[i]).real
                 #check[i] = int_si
             
             if si1[0]=="1":
@@ -131,7 +130,7 @@ def revert_endian(statevector, k, l=0):
                 #reverse order
                 si = si[::-1]
                 int_si = int(si, 2)
-                new_order_statevector[int_si+2**(t-1)] = statevector[i]
+                new_order_statevector[int_si+2**(t-1)] = (statevector[i]).real
                 #check[i] = int_si
 
     else:
@@ -143,15 +142,14 @@ def revert_endian(statevector, k, l=0):
         assert len(all_str) == len(statevector), "Length of statevector and all_str must be equal"
         for i, si in enumerate(all_str):
             new_order_statevector[si] = statevector[i]
-
-    
+            
     return new_order_statevector
 
 
 if __name__ == "__main__":
 
     # define parameters k and l
-    k = 13
+    k = 22
     l = 7
 
     # check if k and l are valid inputs
@@ -164,7 +162,7 @@ if __name__ == "__main__":
 
     # prepare and print the statevector before extension
     qc = prepare(k, l)
-    psi_before, psi_array_before = run_qc(qc, k, l=0, revert_end=True)
+    psi_before, psi_array_before = run_qc2(qc, k, l=0, revert_end=True)
     print("statevector before extension:", psi_array_before)
 
     # extend the quantum circuit
@@ -174,9 +172,13 @@ if __name__ == "__main__":
     print(qc_cop.draw('text'))
     
     # print the statevector after extension
-    psi, psi_array = run_qc(qc, k, l, revert_end=True)
+    psi, psi_array = run_qc2(qc, k, l, revert_end=True)
     print("statevector after extension:", psi_array )
-    #print("locations of nonzero elements", np.argwhere(psi_array))
 
+    #check resulting state  
+    print("Number of non-zero elements in the statevector: ", np.count_nonzero(psi_array), ", (k + l) =  (", (k+l), ")")
+    #print("locations of nonzero elements", np.argwhere(psi_array))
     assert np.count_nonzero(psi_array) == (k+l), "Number of non-zero elements in the statevector must be equal to (k+l)"
-    assert (psi_array[0] - 1/np.sqrt(k+l))< 1e-4, "norm is incorrect"
+    assert (psi_array[0] - 1/np.sqrt(k+l)) < 1e-4, "norm is incorrect"
+    filename = './visualize_statevector_extension.pdf'
+    psi.draw('city', filename=filename)
