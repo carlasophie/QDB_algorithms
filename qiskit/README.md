@@ -19,4 +19,4 @@ python extend.py
 ```
 
 ## To test the QDB operations prepare and extend use the Jupyter notebook
-The jupyter notebook is given by [visualize_algs.ipynb](https://www.ibm.com/quantum/qiskit/visualize_algs.ipynb).
+The jupyter notebook is given by [visualize_algs.ipynb](https://github.com/carlasophie/Quantum_DB/blob/main/qiskit/visualize_algs.ipynb).
