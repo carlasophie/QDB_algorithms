@@ -63,7 +63,7 @@ def prepare(k,l, classical_register=False):
         else:
             #define custom multi-controlled RY gate
             ry_gate = RYGate(-theta12)
-            num_controls=len(np.arange(0,i))
+            num_controls = len(np.arange(0,i))
             multi_control_ry = ry_gate.control(num_controls, ctrl_state=s[:(i)][::-1])
             #apply custom multi-controlled RY gate
             qc.append(multi_control_ry, [qr[qubit_list[i]] for i in (np.arange(0,i))] + [qr[qubit_list[i]]])
@@ -73,7 +73,7 @@ def prepare(k,l, classical_register=False):
             theta1 = 2*np.arccos(np.sqrt(p))
             #define custom multi-controlled RY gate controlled by string s_{t-1}, ..., s_{j+1} (notation as in A.1)
             ry_gate = RYGate(theta1)
-            num_controls=len(np.arange(0,i))
+            num_controls = len(np.arange(0,i))
             multi_control_ry = ry_gate.control(num_controls, ctrl_state=s[:(i)][::-1])
             #apply custom multi-controlled RY gate
             qc.append(multi_control_ry, [qr[qubit_list[i]] for i in (np.arange(0,i))] + [qr[qubit_list[i]]])
@@ -81,7 +81,7 @@ def prepare(k,l, classical_register=False):
         #define custom multi-controlled RY gate controlled by all zero string 0_{t-1}, ..., 0_{j+1} (notation as in A.1)
         #the angle is computed to create the specifically imbalanced database which is going to be extended 
         ry_gate = RYGate(-theta12)
-        num_controls=len(np.arange(0,i))
+        num_controls = len(np.arange(0,i))
         multi_control_ry = ry_gate.control(len(string0(i)), ctrl_state=string0(i))
         qc.append(multi_control_ry, [qr[qubit_list[i]] for i in np.arange(0,i+1)])
 

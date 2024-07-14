@@ -42,7 +42,7 @@ def extend(qc, l):
 
     #define custom multi-controlled RY gate controlled by all zero string 0_{t-1}, ..., 0_{j+1} (notation as in A.1)
     ry_gate = RYGate(theta)
-    num_controls=len(string0(dim_index))
+    num_controls = len(string0(dim_index))
     #print("num_controls = ", num_controls)
     multi_control_ry = ry_gate.control(num_controls, ctrl_state=string0(dim_index))
     qc.append(multi_control_ry, [qr[i] for i in np.arange(0,dim_index+1)[::1]])
