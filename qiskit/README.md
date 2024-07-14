@@ -11,7 +11,7 @@ pip3 install -r requirements.txt
 ```
 
 
-## Simulation of the QDB operations
+## Simulation of the QDB operations prepare and extend 
 
 ```bash
 python prepare.py
