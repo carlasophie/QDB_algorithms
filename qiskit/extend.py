@@ -181,4 +181,4 @@ if __name__ == "__main__":
     assert np.count_nonzero(psi_array) == (k+l), "Number of non-zero elements in the statevector must be equal to (k+l)"
     assert (psi_array[0] - 1/np.sqrt(k+l)) < 1e-4, "norm is incorrect"
     filename = './visualize_statevector_extension.pdf'
-    psi.draw('city', filename=filename)
+    #psi.draw('city', filename=filename)
