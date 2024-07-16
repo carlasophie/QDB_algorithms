@@ -3,7 +3,7 @@
 
 # Quantum Databases
 
-This repository provides the implementation of two operations to manipulate quantum databases, namely the prepare and extend operation. It specializes to databases with "quantum indexing" and "classical data". It will be made available under [https://github.com/carlasophie/Quantum_DB](https://github.com/carlasophie/Quantum_DB).
+This repository provides the implementation of two operations to manipulate quantum databases, namely the `prepare` and `extend` operation. It specializes to databases with "quantum indexing" and "classical data". It will be made available under [https://github.com/carlasophie/Quantum_DB](https://github.com/carlasophie/Quantum_DB).
 
 Two implementations are provided:
 
